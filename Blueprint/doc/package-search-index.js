@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"scrapper"},{"l":"scrapperDatabase"},{"l":"scrapperGui"},{"l":"scrapperGuiHandlers"},{"l":"scrapperHttpConnection"},{"l":"scrapperIO"},{"l":"scrapperModel"},{"l":"scrapperParsers"},{"l":"scrapperProxy"},{"l":"scrapperScheduler"},{"l":"scrapperUtil"},{"l":"scrapperXmlModel"}];updateSearchResults();

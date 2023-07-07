@@ -1,0 +1,12 @@
+scrapper
+scrapperDatabase
+scrapperGui
+scrapperGuiHandlers
+scrapperHttpConnection
+scrapperIO
+scrapperModel
+scrapperParsers
+scrapperProxy
+scrapperScheduler
+scrapperUtil
+scrapperXmlModel
