@@ -181,8 +181,10 @@ public class ScrapperImpl extends Scrapper {
 
 	@Override
 	public void parseHtmlInFileSystem() {
+		
+		String tempFolder = System.getProperty("user.home").replaceAll("\\\\", "/") + "/ScrappingApp/temp/";
 
-		File[] files = new File("C:/Users/LM/ScrappingApp/temp/").listFiles(file -> file.getName().contains(".html"));
+		File[] files = new File(tempFolder).listFiles(file -> file.getName().contains(".html"));
 
 		DataFromPage dataFromPage = null;
 
