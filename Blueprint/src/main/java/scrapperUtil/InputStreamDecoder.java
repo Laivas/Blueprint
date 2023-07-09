@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class InputStreamDecoder {
-	
-	private static String tempFolder = "C:/Users/LM/ScrappingApp/temp/";
+
+	private static String tempFolder = System.getProperty("user.home").replaceAll("\\\\", "/") + "/ScrappingApp/temp/";
 	
 	public InputStreamDecoder() {
 		
