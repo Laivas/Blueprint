@@ -78,7 +78,7 @@ public class HtmlParser {
 
 		dataFromPage.setAddress(findAddressInElements(addressElements));
 
-		dataFromPage.setAdditionalEmails(filteredMails(findEmailInJsoupDocument(document)));
+//		dataFromPage.setAdditionalEmails(filteredMails(findEmailInJsoupDocument(document)));
 
 		return dataFromPage;
 

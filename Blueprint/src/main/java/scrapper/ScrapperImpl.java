@@ -25,10 +25,8 @@ import scrapperParsers.HtmlParser;
 public class ScrapperImpl extends Scrapper {
 
 	private int totalPages;
-
-	private CsvReaderWriter csvReaderWriter;
-
-	private HtmlParser htmlParser;
+	
+	public String tempFolder = System.getProperty("user.home").replaceAll("\\\\", "/") + "/ScrappingApp/temp/";
 
 	@Override
 	public void start() {
@@ -37,10 +35,10 @@ public class ScrapperImpl extends Scrapper {
 
 		properties();
 
-		csvReaderWriter = new CsvReaderWriter();
+		super.csvReaderWriter = new CsvReaderWriter();
 
-		htmlParser = new HtmlParser();
-		
+		super.htmlParser = new HtmlParser();
+
 		super.httpClientRequestBuilder = new HttpClientRequestBuilder();
 
 		super.uriPreparator = new UriPreparator();
@@ -178,47 +176,66 @@ public class ScrapperImpl extends Scrapper {
 		return Collections.synchronizedList(httpClients);
 
 	}
+	
+	public File[] tempFolderFiles(String pathToTempFolder) {
+
+		File[] files = new File(pathToTempFolder).listFiles(file -> file.getName().contains(".html"));
+		
+		return files;
+		
+	}
 
 	@Override
 	public void parseHtmlInFileSystem() {
-		
-		String tempFolder = System.getProperty("user.home").replaceAll("\\\\", "/") + "/ScrappingApp/temp/";
 
-		File[] files = new File(tempFolder).listFiles(file -> file.getName().contains(".html"));
-
-		DataFromPage dataFromPage = null;
+		File[] files = tempFolderFiles(tempFolder);
 
 		for (File file : files) {
+			
+			DataFromPage dataFromPage = null;
 
-			try {
-				dataFromPage = htmlParser.landingPageHtmlParser(Jsoup.parse(file).html(), file.getName());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (file.exists()) {
+
+				try {
+					dataFromPage = htmlParser.landingPageHtmlParser(Jsoup.parse(file).html(), file.getName());
+					
+					writeData(dataFromPage);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				count++;
+
+				System.out.println(file.getName() + " writen.");
+
+				file.delete();
+
+				System.out.println("deleted.");
+
 			}
-			
-			if(getWriteToPath() != null) {
-
-			csvReaderWriter.writeArrayLineToCsv(dataFromPage.fieldsValuesToArray(), getWriteToPath());
-			
-			}
-			
-			if(super.getSqliteDatabaseConnection() != null) {
-			
-			super.getSqliteDatabaseConnection().insertIntoDatabase(dataFromPage);
-				
-			}
-			
-			count++;
-
-			System.out.println(file.getName() + " writen.");
-
-			file.delete();
-
-			System.out.println("deleted.");
 
 		}
 
+	}
+
+	public void writeData(DataFromPage dataFromPage) {
+
+		if (getWriteToPath() != null) {
+
+			super.csvReaderWriter.writeArrayLineToCsv(dataFromPage.fieldsValuesToArray(), getWriteToPath());
+
+		}
+
+		if (super.getSqliteDatabaseConnection() != null) {
+
+			super.getSqliteDatabaseConnection().insertIntoDatabase(dataFromPage);
+
+		}
+
+		dataFromPage = null;
+		
 	}
 
 	@Override

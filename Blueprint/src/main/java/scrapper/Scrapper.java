@@ -51,14 +51,13 @@ public abstract class Scrapper {
 
 	protected UriPreparator uriPreparator;
 
-	private HtmlParser htmlParser;
+	protected HtmlParser htmlParser;
 
-	private CsvReaderWriter csvReaderWriter;
+	protected CsvReaderWriter csvReaderWriter;
 
 	public int count;
 
 	private Query query;
-	
 	
 	
 	/**
