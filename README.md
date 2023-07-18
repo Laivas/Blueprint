@@ -11,6 +11,5 @@ The program will send requests to these websites and after it receive responses 
 
 To build use : mvn package
 
-After jar is build change it's name to Blueprint.jar
 
-Run the program.
+Run the program from Blueprint.jar
