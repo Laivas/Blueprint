@@ -6,8 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.DirectoryChooser;
 import scrapperGui.DataPane;
-import scrapperIO.XmlReaderWriter;
 import scrapperModel.DataPaneSelection;
+import scrapperIO.XmlReaderWriter;
 
 public class DataPaneHandler implements EventHandler<ActionEvent> {
 
@@ -26,33 +26,41 @@ public class DataPaneHandler implements EventHandler<ActionEvent> {
 		dataPaneSelection = new DataPaneSelection();
 
 		XmlReaderWriter xmlReaderWriter = new XmlReaderWriter();
-		
-		if(xmlReaderWriter.fromXml(dataPaneSelection, "dataPaneSelection.xml") != null) {
 
-		dataPaneSelection = xmlReaderWriter.fromXml(dataPaneSelection, "dataPaneSelection.xml");
+		if (xmlReaderWriter.fromXml(dataPaneSelection, "dataPaneSelection.xml") != null) {
 
-		dataPane.getCsvFileNameField().setText(dataPaneSelection.getCsvFileName());
+			dataPaneSelection = xmlReaderWriter.fromXml(dataPaneSelection, "dataPaneSelection.xml");
 
-		dataPane.getWriteToCsvField().setText(dataPaneSelection.getCsvFolderDir());
+			dataPane.getCsvFileNameField().setText(dataPaneSelection.getCsvFileName());
 
-		dataPane.getGenerateCsvFileNameCheckbox().setSelected(dataPaneSelection.isGenerateCsvFileName());
+			dataPane.getWriteToCsvField().setText(dataPaneSelection.getCsvFolderDir());
 
-		dataPane.getGenerateSqlDbFileNameCheckbox().setSelected(dataPaneSelection.isGenerateSqliteDbFileName());
+			dataPane.getGenerateCsvFileNameCheckbox().setSelected(dataPaneSelection.isGenerateCsvFileName());
 
-		dataPane.getCsvFilesRadioButton().setSelected(dataPaneSelection.isSaveCsv());
+			dataPane.getGenerateSqlDbFileNameCheckbox().setSelected(dataPaneSelection.isGenerateSqliteDbFileName());
 
-		dataPane.getSqLiteRadioButton().setSelected(dataPaneSelection.isSaveSqliteDb());
+			dataPane.getCsvFilesRadioButton().setSelected(dataPaneSelection.isSaveCsv());
 
-		dataPane.getSqliteDatabaseNameField().setText(dataPaneSelection.getSqliteDbFileName());
+			dataPane.getSqLiteRadioButton().setSelected(dataPaneSelection.isSaveSqliteDb());
 
-		dataPane.getSqliteDatabaseLocationField().setText(dataPaneSelection.getSqliteFolderDir());
+			dataPane.getSqliteDatabaseNameField().setText(dataPaneSelection.getSqliteDbFileName());
 
-		uiSelectionSwitcher();
-		
+			dataPane.getSqliteDatabaseLocationField().setText(dataPaneSelection.getSqliteFolderDir());
+			
+			
+			dataPane.getJsonFileNameField().setText(dataPaneSelection.getJsonFileName());
+
+			dataPane.getWriteToJsonField().setText(dataPaneSelection.getJsonFolderDir());
+
+			dataPane.getGenerateJsonFileNameCheckbox().setSelected(dataPaneSelection.isGenerateJsonFileName());
+			
+			dataPane.getJsonFileRadioButton().setSelected(dataPaneSelection.isSaveJson());
+
+			uiSelectionSwitcher();
+
 		}
 
 	}
-
 
 	@Override
 	public void handle(ActionEvent event) {
@@ -71,76 +79,86 @@ public class DataPaneHandler implements EventHandler<ActionEvent> {
 			uiSelectionSwitcher();
 
 		}
+		
+		if (event.getSource() == dataPane.getJsonFileRadioButton()
+				|| event.getSource() == dataPane.getGenerateJsonFileNameCheckbox()) {
+			
+			uiSelectionSwitcher();
+			
+		}
 
 		if (event.getSource() == dataPane.getWriteToCsvButton()
-				|| event.getSource() == dataPane.getSqliteDatabaseLocationButton()) {
+				|| event.getSource() == dataPane.getSqliteDatabaseLocationButton()
+				|| event.getSource() == dataPane.getWriteToJsonButton()) {
 
-			directoryChooserHandler(event);
+			DirectoryChooser directoryChooser = new DirectoryChooser();
+
+			directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+			File file = directoryChooser.showDialog(dataPane.getScene().getWindow());
+
+			if (file != null) {
+
+				if (event.getSource() == dataPane.getWriteToCsvButton()) {
+
+					dataPane.getWriteToCsvField().setText(file.getAbsolutePath());
+
+				}
+
+				if (event.getSource() == dataPane.getSqliteDatabaseLocationButton()) {
+
+					dataPane.getSqliteDatabaseLocationField().setText(file.getAbsolutePath());
+
+				}
+				
+				if (event.getSource() == dataPane.getWriteToJsonButton()) {
+					
+					dataPane.getWriteToJsonField().setText(file.getAbsolutePath());
+					
+				}
+
+			}
 
 		}
 
 		if (event.getSource() == dataPane.getSaveButton()) {
 
-			saveButtonHandler();
+			XmlReaderWriter xmlReaderWriter = new XmlReaderWriter();
+
+			dataPaneSelection = new DataPaneSelection();
+
+			dataPaneSelection.setCsvFileName(dataPane.getCsvFileNameField().getText());
+
+			dataPaneSelection.setCsvFolderDir(dataPane.getWriteToCsvField().getText());
+
+			dataPaneSelection.setGenerateCsvFileName(dataPane.getGenerateCsvFileNameCheckbox().isSelected());
+
+			dataPaneSelection.setGenerateSqliteDbFileName(dataPane.getGenerateSqlDbFileNameCheckbox().isSelected());
+
+			dataPaneSelection.setSaveCsv(dataPane.getCsvFilesRadioButton().isSelected());
+
+			dataPaneSelection.setSaveSqliteDb(dataPane.getSqLiteRadioButton().isSelected());
+
+			dataPaneSelection.setSqliteDbFileName(dataPane.getSqliteDatabaseNameField().getText());
+
+			dataPaneSelection.setSqliteFolderDir(dataPane.getSqliteDatabaseLocationField().getText());
+			
+			
+			dataPaneSelection.setSaveJson(dataPane.getJsonFileRadioButton().isSelected());
+			
+			dataPaneSelection.setJsonFileName(dataPane.getJsonFileNameField().getText());
+
+			dataPaneSelection.setJsonFolderDir(dataPane.getWriteToJsonField().getText());
+
+			dataPaneSelection.setGenerateJsonFileName(dataPane.getGenerateJsonFileNameCheckbox().isSelected());
+			
+
+			xmlReaderWriter.toXml(dataPaneSelection, "dataPaneSelection.xml");
 
 		}
 
 	}
-	
-	private void directoryChooserHandler(ActionEvent event) {
-		
-		DirectoryChooser directoryChooser = new DirectoryChooser();
 
-//		directoryChooser.getExtensionFilters().add(new ExtensionFilter("Csv Files", "*.csv"));
-
-		directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-		File file = directoryChooser.showDialog(dataPane.getScene().getWindow());
-
-		if (file != null) {
-
-			if (event.getSource() == dataPane.getWriteToCsvButton()) {
-
-				dataPane.getWriteToCsvField().setText(file.getAbsolutePath());
-
-			}
-
-			if (event.getSource() == dataPane.getSqliteDatabaseLocationButton()) {
-
-				dataPane.getSqliteDatabaseLocationField().setText(file.getAbsolutePath());
-
-			}
-
-		}
-		
-	}
-	
-	private void saveButtonHandler() {
-		
-		XmlReaderWriter xmlReaderWriter = new XmlReaderWriter();
-
-		dataPaneSelection = new DataPaneSelection();
-
-		dataPaneSelection.setCsvFileName(dataPane.getCsvFileNameField().getText());
-
-		dataPaneSelection.setCsvFolderDir(dataPane.getWriteToCsvField().getText());
-
-		dataPaneSelection.setGenerateCsvFileName(dataPane.getGenerateCsvFileNameCheckbox().isSelected());
-
-		dataPaneSelection.setGenerateSqliteDbFileName(dataPane.getGenerateSqlDbFileNameCheckbox().isSelected());
-
-		dataPaneSelection.setSaveCsv(dataPane.getCsvFilesRadioButton().isSelected());
-
-		dataPaneSelection.setSaveSqliteDb(dataPane.getSqLiteRadioButton().isSelected());
-
-		dataPaneSelection.setSqliteDbFileName(dataPane.getSqliteDatabaseNameField().getText());
-
-		dataPaneSelection.setSqliteFolderDir(dataPane.getSqliteDatabaseLocationField().getText());
-
-		xmlReaderWriter.toXml(dataPaneSelection, "dataPaneSelection.xml");	
-		
-	}
-	
 	public void uiSelectionSwitcher() {
 
 		if (dataPane.getCsvFilesRadioButton().isSelected()) {
@@ -150,6 +168,14 @@ public class DataPaneHandler implements EventHandler<ActionEvent> {
 			dataPane.getSqliteDatabaseNameField().setDisable(true);
 
 			dataPane.getGenerateSqlDbFileNameCheckbox().setDisable(true);
+			
+			
+			dataPane.getWriteToJsonButton().setDisable(true);
+			
+			dataPane.getJsonFileNameField().setDisable(true);
+			
+			dataPane.getGenerateJsonFileNameCheckbox().setDisable(true);
+			
 
 			dataPane.getWriteToCsvButton().setDisable(false);
 
@@ -176,8 +202,18 @@ public class DataPaneHandler implements EventHandler<ActionEvent> {
 			dataPane.getWriteToCsvField().setDisable(true);
 
 			dataPane.getCsvFileNameField().setDisable(true);
-
+			
+			dataPane.getCsvFileNameField().setDisable(true);
+			
 			dataPane.getGenerateCsvFileNameCheckbox().setDisable(true);
+			
+			
+			dataPane.getWriteToJsonButton().setDisable(true);
+			
+			dataPane.getJsonFileNameField().setDisable(true);
+			
+			dataPane.getGenerateJsonFileNameCheckbox().setDisable(true);
+			
 
 			dataPane.getGenerateSqlDbFileNameCheckbox().setDisable(false);
 
@@ -190,7 +226,46 @@ public class DataPaneHandler implements EventHandler<ActionEvent> {
 				dataPane.getSqliteDatabaseNameField().setDisable(false);
 
 			}
+			
+		}
+		
+		if (dataPane.getJsonFileRadioButton().isSelected()) {
 
+			dataPane.getSqliteDatabaseLocationButton().setDisable(true);
+
+			dataPane.getSqliteDatabaseNameField().setDisable(true);
+
+			dataPane.getGenerateSqlDbFileNameCheckbox().setDisable(true);
+			
+			
+			dataPane.getWriteToJsonButton().setDisable(false);
+			
+			dataPane.getJsonFileNameField().setDisable(false);
+			
+			dataPane.getGenerateJsonFileNameCheckbox().setDisable(false);
+			
+
+			dataPane.getWriteToCsvButton().setDisable(true);
+
+			dataPane.getWriteToCsvField().setDisable(true);
+
+			dataPane.getCsvFileNameField().setDisable(true);
+			
+			dataPane.getCsvFileNameField().setDisable(true);
+			
+			dataPane.getGenerateCsvFileNameCheckbox().setDisable(true);
+
+			if (dataPane.getGenerateJsonFileNameCheckbox().isSelected()) {
+
+				dataPane.getJsonFileNameField().setDisable(true);
+
+			} else {
+
+				dataPane.getJsonFileNameField().setDisable(false);
+
+			}
+
+			
 		}
 
 	}

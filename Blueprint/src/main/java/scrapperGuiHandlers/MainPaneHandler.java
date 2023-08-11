@@ -25,6 +25,7 @@ import scrapperIO.XmlReaderWriter;
 import scrapperModel.DataPaneSelection;
 import scrapperModel.SettingsPaneSelection;
 import scrapperUtil.FileNameGenerator;
+import scrapperIO.ObjectToJsonWriter;
 
 @Getter
 @Setter
@@ -328,7 +329,33 @@ public class MainPaneHandler implements EventHandler<ActionEvent> {
 			}
 
 		}
-		if (dataPaneSelection.isSaveSqliteDb() == false && dataPaneSelection.isSaveCsv() == false) {
+		
+		if (dataPaneSelection.isSaveJson()) {
+
+			if (dataPaneSelection.isGenerateJsonFileName()) {
+
+				FileNameGenerator fileNameGenerator = new FileNameGenerator();
+				
+				scrapper.setObjectToJsonWriter(new ObjectToJsonWriter());
+
+				scrapper.setWriteToPath(Paths.get(dataPaneSelection.getJsonFolderDir() + File.separator
+						+ fileNameGenerator.generateDateFileName() + ".json"));
+
+			}
+
+			if (dataPaneSelection.isGenerateJsonFileName() == false && dataPaneSelection.getJsonFileName() != null
+					&& !dataPaneSelection.getJsonFileName().isEmpty()) {
+
+				scrapper.setObjectToJsonWriter(new ObjectToJsonWriter());
+				
+				scrapper.setWriteToPath(Paths.get(dataPaneSelection.getJsonFolderDir() + File.separator
+						+ dataPaneSelection.getJsonFileName() + ".json"));
+
+			}
+		}
+		
+		if (dataPaneSelection.isSaveSqliteDb() == false && dataPaneSelection.isSaveCsv() == false
+				&& dataPaneSelection.isSaveJson() == false ) {
 
 			FileNameGenerator fileNameGenerator = new FileNameGenerator();
 

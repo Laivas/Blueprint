@@ -153,14 +153,25 @@ public class SettingsPaneHandler implements EventHandler<ActionEvent> {
 			
 			settingsPane.getAvailableProxyTextField().setText(settingsPaneSelection.getAvailableProxyCount());
 			
+			if(!settingsPaneSelection.getAvailableProxyCount().matches("")) {
+			
 			settingsPane.getNumberOfThreadsComboBox().getItems().addAll(valuesAsList(Integer.valueOf(settingsPaneSelection.getAvailableProxyCount())));
+			}
 			
 			settingsPane.getNumberOfThreadsComboBox().setValue(settingsPaneSelection.getNumberOfThreads());
+			
+			if(settingsPaneSelection.getNumberOfThreads() != null) {
+			
+			if(!settingsPaneSelection.getNumberOfThreads().matches("")) {
 			
 			if(Integer.valueOf(settingsPaneSelection.getNumberOfThreads()) > 0) {
 				
 				settingsPane.getNumberOfThreadsComboBox().setDisable(false);
 				
+			}
+			
+			}
+			
 			}
 			
 			settingsPane.getRequestDelayComboBox().setValue(settingsPaneSelection.getRequestDelay());

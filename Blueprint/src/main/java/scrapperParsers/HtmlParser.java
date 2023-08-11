@@ -33,6 +33,8 @@ public class HtmlParser {
 		DataFromPage dataFromPage = new DataFromPage();
 
 		dataFromPage.setUrl(link);
+		
+		String emails = "";
 
 		for (Element element : hrefs) {
 
@@ -62,15 +64,23 @@ public class HtmlParser {
 
 			}
 
-			if (href.contains("tel")) {
+			if (href.contains("tel:")) {
 
 				dataFromPage.setTel(href);
 
 			}
 
-			if (href.contains("mailto")) {
+			if (href.contains("mailto")) {				
 				
-				dataFromPage.setMail(href);
+				emails += href + " ";
+				
+				if(emails.contains("mailto:")) {
+					
+					emails = emails.split("mailto:")[1];
+					
+				}
+				
+				dataFromPage.setMail(emails);
 
 			}
 
@@ -83,6 +93,7 @@ public class HtmlParser {
 		return dataFromPage;
 
 	}
+	
 
 	public String findAddressInElements(Elements addressElements) {
 

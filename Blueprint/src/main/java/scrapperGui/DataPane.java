@@ -39,17 +39,25 @@ public class DataPane extends BorderPane {
 	
 	private TextField writeToCsvField;
 	
+	private TextField writeToJsonField;
+	
 	private TextField sqliteDatabaseLocationField;
 	
 	private TextField csvFileNameField;
+	
+	private TextField jsonFileNameField;
 	
 	private CheckBox generateCsvFileNameCheckbox;
 	
 	private CheckBox generateSqlDbFileNameCheckbox;
 	
+	private CheckBox generateJsonFileNameCheckbox;
+	
 	private Button writeToCsvButton;
 	
 	private Button sqliteDatabaseLocationButton;
+	
+	private Button writeToJsonButton;
 	
 	private Button saveButton;
 	
@@ -62,10 +70,12 @@ public class DataPane extends BorderPane {
 	private RadioButton csvFilesRadioButton;
 	
 	private RadioButton sqLiteRadioButton;
+	
+	private RadioButton jsonFileRadioButton;
 			
 	private ComboBox<String> selectSaveDataComboBox;
 	
-	private String[] selectSaveDataValues = {"Csv File", "Database"};
+	private String[] selectSaveDataValues = {"Csv File", "Database", "Json File"};
 	
 	private DataPaneHandler dataPaneHandler;
 	
@@ -85,6 +95,8 @@ public class DataPane extends BorderPane {
 		
 		borderPane.setBottom(selectionForSqLite());
 		
+		setCenter(selectionForJsonFiles());
+		
 		setBottom(buttonPane());
 		
 		setTop(borderPane);
@@ -99,13 +111,19 @@ public class DataPane extends BorderPane {
 		
 		csvFilesRadioButton.setOnAction(dataPaneHandler);
 		
+		jsonFileRadioButton.setOnAction(dataPaneHandler);
+		
 		writeToCsvButton.setOnAction(dataPaneHandler);
+		
+		writeToJsonButton.setOnAction(dataPaneHandler);
 		
 		sqliteDatabaseLocationButton.setOnAction(dataPaneHandler);
 		
 		generateCsvFileNameCheckbox.setOnAction(dataPaneHandler);
 		
 		generateSqlDbFileNameCheckbox.setOnAction(dataPaneHandler);
+		
+		generateJsonFileNameCheckbox.setOnAction(dataPaneHandler);
 		
 		saveButton.setOnAction(dataPaneHandler);
 		
@@ -280,6 +298,73 @@ public class DataPane extends BorderPane {
 		return borderedTitledPane;
 	}
 	
+	
+	public BorderedTitledPane selectionForJsonFiles() {
+		
+		gridPane = new GridPane();
+		
+		gridPane.setPadding(new Insets(10, 10, 10, 10));
+		
+		gridPane.setVgap(5); 
+		
+	    gridPane.setHgap(5);  
+		
+		
+		label = new Label("Generate Name:");
+		
+		generateJsonFileNameCheckbox = new CheckBox();
+		
+//		readFromCsvField.setPrefWidth(475);
+//		
+//		readFromCsvField.setDisable(true);
+//		
+//		readFromCsvField.setStyle("-fx-opacity: 1.0;");
+//		
+//		readFromCsvButton = new Button("...");
+		
+		
+		gridPane.add(label, 1, 1);
+		gridPane.add(generateJsonFileNameCheckbox, 2, 1);
+//		gridPane.add(readFromCsvButton, 3, 1);
+	    
+		label = new Label("Csv File Name:");		
+		
+		jsonFileNameField = new TextField("");
+		
+		jsonFileNameField.setMaxWidth(200);
+	
+		
+		gridPane.add(label, 1, 2);
+		
+		gridPane.add(jsonFileNameField, 2, 2);
+		
+		
+		
+		label = new Label("Json Folder:");
+		
+		writeToJsonField = new TextField();
+		
+		writeToJsonField.setPrefWidth(475);
+		
+		writeToJsonField.setDisable(true);
+		
+		writeToJsonField.setStyle("-fx-opacity: 1.0;");
+		
+		writeToJsonButton = new Button("...");
+		
+		
+		gridPane.add(label, 1, 3);
+		gridPane.add(writeToJsonField, 2, 3);
+		gridPane.add(writeToJsonButton, 3, 3);
+		
+		
+		borderedTitledPane = new BorderedTitledPane("Choose Default Json Location:", gridPane);
+		
+		
+		return borderedTitledPane;
+		
+	}
+	
 	public BorderedTitledPane selectDataSave() {
 		
 		hBox = new HBox();
@@ -295,11 +380,15 @@ public class DataPane extends BorderPane {
 		
 		sqLiteRadioButton = new RadioButton("SQLite");
 		
+		jsonFileRadioButton = new RadioButton("Json");
+		
 		csvFilesRadioButton.setToggleGroup(toggleGroup);
 		
 		sqLiteRadioButton.setToggleGroup(toggleGroup);
 		
-		hBox.getChildren().addAll(csvFilesRadioButton, sqLiteRadioButton);
+		jsonFileRadioButton.setToggleGroup(toggleGroup);
+		
+		hBox.getChildren().addAll(csvFilesRadioButton, sqLiteRadioButton, jsonFileRadioButton);
 				
 		borderedTitledPane = new BorderedTitledPane("Where To Save:", hBox);
 		

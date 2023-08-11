@@ -16,6 +16,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <outputFile>${project.artifactId}.jar</outputFile>
               <shadedArtifactAttached>true</shadedArtifactAttached>
               <transformers>
                 <transformer />

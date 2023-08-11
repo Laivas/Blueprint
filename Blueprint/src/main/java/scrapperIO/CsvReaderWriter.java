@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -81,7 +83,7 @@ public class CsvReaderWriter {
 
 		try {
 
-			Reader reader = Files.newBufferedReader(path);
+			Reader reader = Files.newBufferedReader(path, StandardCharsets.ISO_8859_1);
 
 			CSVReader csvReader = new CSVReader(reader);
 

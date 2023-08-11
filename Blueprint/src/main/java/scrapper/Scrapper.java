@@ -14,6 +14,7 @@ import java.util.Random;
 import lombok.Getter;
 import lombok.Setter;
 import scrapperDatabase.SqliteDatabaseConnection;
+import scrapperIO.ObjectToJsonWriter;
 import scrapperHttpConnection.HttpClientRequestBuilder;
 import scrapperIO.CsvReaderWriter;
 import scrapperParsers.HtmlParser;
@@ -54,6 +55,8 @@ public abstract class Scrapper {
 	protected HtmlParser htmlParser;
 
 	protected CsvReaderWriter csvReaderWriter;
+	
+	protected ObjectToJsonWriter objectToJsonWriter;
 
 	public int count;
 

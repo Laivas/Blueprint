@@ -16,9 +16,13 @@ public class DataPaneSelection {
 	
 	private boolean saveSqliteDb;
 	
+	private boolean saveJson;
+	
 	private boolean generateCsvFileName;
 	
 	private boolean generateSqliteDbFileName;
+	
+	private boolean generateJsonFileName;
 	
 	private String csvFileName;
 	
@@ -27,5 +31,10 @@ public class DataPaneSelection {
 	private String sqliteDbFileName;
 	
 	private String sqliteFolderDir;
+	
+	private String jsonFileName;
+	
+	private String jsonFolderDir;
+	
 
 }

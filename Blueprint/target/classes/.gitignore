@@ -1,3 +1,13 @@
 /META-INF/
 /scrapper/
 /scrapperParsers/
+/scrapperDatabase/
+/scrapperGui/
+/scrapperGuiHandlers/
+/scrapperHttpConnection/
+/scrapperIO/
+/scrapperModel/
+/scrapperProxy/
+/scrapperScheduler/
+/scrapperUtil/
+/scrapperXmlModel/

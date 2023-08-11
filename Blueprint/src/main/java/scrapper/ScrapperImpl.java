@@ -25,7 +25,7 @@ import scrapperParsers.HtmlParser;
 public class ScrapperImpl extends Scrapper {
 
 	private int totalPages;
-	
+
 	public String tempFolder = System.getProperty("user.home").replaceAll("\\\\", "/") + "/ScrappingApp/temp/";
 
 	@Override
@@ -176,13 +176,13 @@ public class ScrapperImpl extends Scrapper {
 		return Collections.synchronizedList(httpClients);
 
 	}
-	
+
 	public File[] tempFolderFiles(String pathToTempFolder) {
 
 		File[] files = new File(pathToTempFolder).listFiles(file -> file.getName().contains(".html"));
-		
+
 		return files;
-		
+
 	}
 
 	@Override
@@ -190,29 +190,33 @@ public class ScrapperImpl extends Scrapper {
 
 		File[] files = tempFolderFiles(tempFolder);
 
-		for (File file : files) {
-			
-			DataFromPage dataFromPage = null;
+		if (files != null) {
 
-			if (file.exists()) {
+			for (File file : files) {
 
-				try {
-					dataFromPage = htmlParser.landingPageHtmlParser(Jsoup.parse(file).html(), file.getName());
-					
-					writeData(dataFromPage);
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				DataFromPage dataFromPage = null;
+
+				if (file.exists()) {
+
+					try {
+						dataFromPage = htmlParser.landingPageHtmlParser(Jsoup.parse(file).html(), file.getName());
+
+						writeData(dataFromPage);
+
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					count++;
+
+					System.out.println(file.getName() + " writen.");
+
+					file.delete();
+
+					System.out.println("deleted.");
+
 				}
-
-				count++;
-
-				System.out.println(file.getName() + " writen.");
-
-				file.delete();
-
-				System.out.println("deleted.");
 
 			}
 
@@ -222,7 +226,7 @@ public class ScrapperImpl extends Scrapper {
 
 	public void writeData(DataFromPage dataFromPage) {
 
-		if (getWriteToPath() != null) {
+		if (getWriteToPath() != null && super.objectToJsonWriter == null) {
 
 			super.csvReaderWriter.writeArrayLineToCsv(dataFromPage.fieldsValuesToArray(), getWriteToPath());
 
@@ -234,8 +238,14 @@ public class ScrapperImpl extends Scrapper {
 
 		}
 
+		if (objectToJsonWriter != null) {
+
+			objectToJsonWriter.writeRealtorAgentDataJsonFile(dataFromPage, getWriteToPath());
+
+		}
+
 		dataFromPage = null;
-		
+
 	}
 
 	@Override
